@@ -1,0 +1,200 @@
+代码：
+2. 把lena 512*512图像灰度级逐级递减8-1显示：
+close all;%清除图形窗口
+clear all;%清除MARLAB软件工作内存中的变量
+clc;%清除命令窗口显示内容
+Ori=imread('lena.bmp');%导入原始图像“lena.bmp”
+figure(1)%在第一个图形窗口下显示灰度级从8-5的图片
+subplot(2,2,1)
+imshow(Ori);
+title('image of grayscale 8');%显示灰度级为8的原图像
+[a,b]=size(Ori);%读取原始图像“lena.bmp”的长和宽
+pic7=zeros(a,b);%产生一个名为pic7的512X512的0矩阵
+pic6=zeros(a,b);%产生一个名为pic6的512X512的0矩阵
+pic5=zeros(a,b);%产生一个名为pic5的512X512的0矩阵
+pic4=zeros(a,b);%产生一个名为pic4的512X512的0矩阵
+pic3=zeros(a,b);%产生一个名为pic3的512X512的0矩阵
+pic2=zeros(a,b);%产生一个名为pic2的512X512的0矩阵
+pic1=zeros(a,b);%产生一个名为pic1的512X512的0矩阵
+for m=1:a
+    for n=1:b
+        pic7(m,n)=floor(Ori(m,n)/2);%将原图像的每个像素的灰度级除以2，并用函数floor进行下取整
+    end
+end
+subplot(2,2,2)
+imshow((pic7),[0,127]);
+title('image of grayscale 7');
+for m=1:a
+    for n=1:b
+        pic6(m,n)=floor(pic7(m,n)/2);%将图像pic7的每个像素的灰度级除以2，并用函数floor进行下取整
+    end
+end
+subplot(2,2,3)
+imshow((pic6),[0,63]);
+title('image of grayscale 6');
+for m=1:a
+    for n=1:b
+        pic5(m,n)=floor(pic6(m,n)/2);%将图像pic6的每个像素的灰度级除以2，并用函数floor进行下取整
+    end
+end
+subplot(2,2,4)
+imshow((pic5),[0,31]);
+title('image of grayscale 5');
+for m=1:a
+    for n=1:b
+        pic4(m,n)=floor(pic5(m,n)/2);%将图像pic5的每个像素的灰度级除以2，并用函数floor进行下取整
+    end
+end
+figure(2)
+subplot(2,2,1)
+imshow((pic4),[0,15]);
+title('image of grayscale 4');
+for m=1:a
+    for n=1:b
+        pic3(m,n)=floor(pic4(m,n)/2);%将图像pic4的每个像素的灰度级除以2，并用函数floor进行下取整
+    end
+end
+subplot(2,2,2)
+imshow((pic3),[0,7]);
+title('image of grayscale 3');
+for m=1:a
+    for n=1:b
+        pic2(m,n)=floor(pic3(m,n)/2);%将图像pic3的每个像素的灰度级除以2，并用函数floor进行下取整
+    end
+end
+subplot(2,2,3)
+imshow((pic2),[0,3]);
+title('image of grayscale 2');
+for m=1:a
+    for n=1:b
+        pic1(m,n)=floor(pic2(m,n)/2);%将图像pic2的每个像素的灰度级除以2，并用函数floor进行下取整
+    end
+end
+subplot(2,2,4)
+imshow((pic1),[0,1]);
+title('image of grayscale 1')
+figure(3)
+imshow(Ori);
+title('Original picture')
+
+3. 计算lena图像的均值方差：
+close all;%清除图形窗口
+clear all;%清除MARLAB软件工作内存中的变量
+clc;%清除命令窗口显示内容
+original=imread('lena.bmp');%导入原始图像“lena.bmp”
+meanvalue=mean2(original)
+variance=std2(original)
+
+
+4．把lena图像用近邻、双线性和双三次插值法zoom到2048*2048close all;%清除图形窗口
+clear all;%清除MARLAB软件工作内存中的变量
+clc;%清除命令窗口显示内容
+original=imread('lena.bmp');%导入原始图像“lena.bmp”
+IN=imresize(original,[2048,2048],'nearest');%把lena图像用近邻法zoom到2048*2048
+IB=imresize(original,[2048,2048],'bilinear');%把lena图像用双线性法zoom到2048*2048
+IC=imresize(original,[2048,2048],'bicubic');%把lena图像用双三次插值法zoom到2048*2048
+subplot(2,2,1);
+imshow(original);%显示原始图像
+title('(a) original picture');
+subplot(2,2,2);
+imshow(IN);%显示lena图像用近邻法zoom到2048*2048后的图像
+title('(b) nearest interpolation');
+subplot(2,2,3);
+imshow(IB);%显示lena图像用双线性法zoom到2048*2048后的图像
+title('(c) bilinear interpolation');
+subplot(2,2,4);
+imshow(IC);%显示lena图像用双三次插值法zoom到2048*2048后的图像
+title('(d) bicubic interpolation')
+
+
+
+5．（1）把lena和elain图像分别进行水平shear（参数可设置为1.5，或者自行选择），并采用用近邻、双线性和双三次插值法zoom到2048*2048：
+close all;%清除图形窗口
+clear all;%清除MARLAB软件工作内存中的变量
+clc;%清除命令窗口显示内容
+image1=imread('lena.bmp');%导入原始图像“lena.bmp”
+image2=imread('elain1.bmp');%导入原始图像“elain1.bmp”
+Tf=[1 1.2 0;0 1 0;0 0 1];%把lena图像进行水平shear参数设置为1.2
+tform=maketform('affine',Tf);
+image11=imtransform(image1,tform);
+image1N=imresize(image11,[2048 2048],'nearest');%把lena图像采用近邻法zoom到2048*2048
+image1B=imresize(image11,[2048 2048],'bilinear');%把lena图像采用双线性法zoom到2048*2048
+image1C=imresize(image11,[2048 2048],'bicubic');%把lena图像采用三次插值法zoom到2048*2048
+image22=imtransform(image2,tform);
+image2N=imresize(image22,[2048 2048],'nearest');%把elain1图像采用近邻法zoom到2048*2048
+image2B=imresize(image22,[2048 2048],'bilinear');%把elain1图像采用双线性法zoom到2048*2048
+image2C=imresize(image22,[2048 2048],'bicubic');%把elain1图像采用三次插值法zoom到2048*2048
+figure(1);%在同一图像窗口下分别显示lena图像进行水平shear（参数设置为1.2），并采用近邻、双线性和双三次插值法zoom到2048*2048后的图像
+subplot(2,2,1)
+imshow(image1);
+title('original image of lena');
+subplot(2,2,2)
+imshow(image1N);
+title('nearest interpolation of lena');
+subplot(2,2,3)
+imshow(image1B);
+title('bilinear interpolation of lena');
+subplot(2,2,4)
+imshow(image1C);
+title('bicubic interpolation of lena');
+figure(2);%在同一图像窗口下分别显示elain图像进行水平shear（参数设置为1.2），并采用近邻、双线性和双三次插值法zoom到2048*2048后的图像
+subplot(2,2,1)
+imshow(image2);
+title('original image of elain');
+subplot(2,2,2)
+imshow(image2N);
+title('nearest interpolation of elain');
+subplot(2,2,3)
+imshow(image2B);
+title('nearest interpolation of elain');
+subplot(2,2,4)
+imshow(image2C);
+title('nearest interpolation of elain')
+figure(3)
+subplot(1,2,1)
+imshow(image1);
+subplot(1,2,2)
+imshow(image2);
+
+（2）把lena和elain图像分别旋转30度，并采用用近邻、双线性和双三次插值法zoom到2048*2048：
+close all;%清除图形窗口
+clear all;%清除MARLAB软件工作内存中的变量
+clc;%清除命令窗口显示内容
+image1=imread('lena.bmp');%导入原始图像“lena.bmp”
+image2=imread('elain1.bmp');%导入原始图像“elain1.bmp”
+Tf=[cosd(30) sind(30) 0;-sind(30) cos(30) 0;0 0 1];%把图像旋转30度
+tform=maketform('affine',Tf);
+image11=imtransform(image1,tform);
+image1N=imresize(image11,[2048 2048],'nearest');%把lena图像采用近邻法zoom到2048*2048
+image1B=imresize(image11,[2048 2048],'bilinear');%把lena图像采用双线性法zoom到2048*2048
+image1C=imresize(image11,[2048 2048],'bicubic');%把lena图像采用三次插值法zoom到2048*2048
+image22=imtransform(image2,tform);
+image2N=imresize(image22,[2048 2048],'nearest');%把elain1图像采用近邻法zoom到2048*2048
+image2B=imresize(image22,[2048 2048],'bilinear');%把elain1图像采用双线性法zoom到2048*2048
+image2C=imresize(image22,[2048 2048],'bicubic');%把elain1图像采用三次插值法zoom到2048*2048
+figure(1);%在同一图像窗口下分别显示lena图像旋转30度，并采用近邻、双线性和双三次插值法zoom到2048*2048后的图像
+subplot(2,2,1)
+imshow(image1);
+title('original image of lena');
+subplot(2,2,2)
+imshow(image1N);
+title('nearest interpolation of lena');
+subplot(2,2,3)
+imshow(image1B);
+title('bilinear interpolation of lena');
+subplot(2,2,4)
+imshow(image1C);
+title('bicubic interpolation of lena');
+figure(2);%在同一图像窗口下分别显示elain图像旋转30度，并采用近邻、双线性和双三次插值法zoom到2048*2048后的图像
+subplot(2,2,1)
+imshow(image2);
+title('original image of elain');
+subplot(2,2,2)
+imshow(image2N);
+title('nearest interpolation of elain');
+subplot(2,2,3)
+imshow(image2B);
+title('nearest interpolation of elain');
+subplot(2,2,4)
+imshow(image2C);
+title('nearest interpolation of elain')
